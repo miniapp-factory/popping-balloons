@@ -121,6 +121,7 @@ export default function Balloons() {
           )}
         </div>
       ))}
-    </div>
+      </div>
+      </>  {/* Close the fragment before the closing parenthesis */}
   );
 }
