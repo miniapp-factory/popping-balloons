@@ -17,6 +17,15 @@ export default function Balloons() {
   const [balloons, setBalloons] = useState<Balloon[]>([]);
   const [nextId, setNextId] = useState(0);
 
+  // State for splash effects that appear when a balloon pops
+  type Splash = {
+    id: number;
+    top: number;
+    left: number;
+    color: string;
+  };
+  const [splashes, setSplashes] = useState<Splash[]>([]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setBalloons((prev) => [
@@ -54,12 +63,38 @@ export default function Balloons() {
         b.id === id ? { ...b, popped: true, top: b.top + 20 } : b
       )
     );
+    // Create a splash effect at the balloon's position
+    const poppedBalloon = balloons.find((b) => b.id === id);
+    if (poppedBalloon) {
+      setSplashes((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          top: poppedBalloon.top + 20,
+          left: poppedBalloon.left,
+          color: poppedBalloon.color,
+        },
+      ]);
+    }
     const audio = new Audio("/pop-sound.mp3");
     audio.play();
   };
 
   return (
-    <div className="relative w-full h-[80vh] overflow-hidden">
+    <>
+      {/* Global styles for splash animation */}
+      <style>{`
+        @keyframes splash {
+          0% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(3); opacity: 0; }
+        }
+        .splash {
+          position: absolute;
+          border-radius: 50%;
+          animation: splash 0.5s forwards;
+        }
+      `}</style>
+      <div className="relative w-full h-[80vh] overflow-hidden">
       {balloons.map((b) => (
         <div
           key={b.id}
