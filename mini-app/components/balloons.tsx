@@ -122,6 +122,19 @@ export default function Balloons() {
         </div>
       ))}
       </div>
+      {splashes.map((s) => (
+        <div
+          key={s.id}
+          className="splash"
+          style={{
+            top: `${s.top}px`,
+            left: `${s.left}%`,
+            width: "20px",
+            height: "20px",
+            backgroundColor: s.color,
+          }}
+        />
+      ))}
       </>  {/* Close the fragment before the closing parenthesis */}
   );
 }
